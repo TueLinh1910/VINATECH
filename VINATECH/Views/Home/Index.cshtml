@@ -1,15 +1,53 @@
-﻿@{
-    ViewData["Title"] = "VINATECH - Trang thông tin Hiệp hội";
+﻿@model IEnumerable<VINATECH.Models.Article>
+@{
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="container mt-5">
-    <h1 class="display-4">VINATECH</h1>
-    <p class="lead">Trang thông tin điện tử cho Hiệp hội Phần mềm và Dịch vụ Công nghệ Thông tin Việt Nam.</p>
+<div class="row">
+    <!-- Cột trái: danh sách bài viết -->
+    <div class="col-md-8">
+        <h2 class="mb-4">📰 Bài viết mới nhất</h2>
+        @foreach (var item in Model)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="@item.ImagePath" class="img-fluid rounded-start" alt="Ảnh bài viết" />
+                        }
+                        else
+                        {
+                            <img src="C:\Users\maitu\Downloads\no-image.jpg" class="img-fluid rounded-start" alt="Không có ảnh" />
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text text-muted">
+                                <small>Danh mục: @item.Category?.Name | Ngày đăng: @item.PublishDate.ToString("dd/MM/yyyy")</small>
+                            </p>
+                            <p class="card-text">
+                                @(item.Content.Length > 120 ? item.Content.Substring(0, 120) + "..." : item.Content)
+                            </p>
+                            <a asp-controller="Article" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Đọc thêm</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
-    <hr />
-    <p>Hiện tại hệ thống đã cấu hình kết nối cơ sở dữ liệu. Tiếp theo bạn có thể tạo module quản lý bài viết, danh mục và hội viên.</p>
-
-    <p>
-        <a class="btn btn-primary" href="/Articles">Quản lý bài viết (chưa có)</a>
-    </p>
+    <!-- Cột phải: danh mục -->
+    <div class="col-md-4">
+        <h4 class="mb-3">📂 Danh mục bài viết</h4>
+        <ul class="list-group">
+            @foreach (var cat in ViewBag.Categories)
+            {
+                <li class="list-group-item">
+                    <a asp-action="Index" asp-route-categoryId="@cat.Id" class="text-decoration-none">@cat.Name</a>
+                </li>
+            }
+        </ul>
+    </div>
 </div>

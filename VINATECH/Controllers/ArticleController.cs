@@ -48,10 +48,30 @@ namespace VINATECH.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Nếu có file ảnh được upload
+                if (article.ImageFile != null)
+                {
+                    // Tạo tên file duy nhất
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(article.ImageFile.FileName);
+
+                    // Đường dẫn lưu ảnh
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    // Lưu file vào wwwroot/images
+                    using (var stream = new FileStream(uploadPath, FileMode.Create))
+                    {
+                        await article.ImageFile.CopyToAsync(stream);
+                    }
+
+                    // Lưu đường dẫn tương đối vào DB
+                    article.ImagePath = "/images/" + fileName;
+                }
+
                 _db.Add(article);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.Categories = _db.Categories.ToList();
             return View(article);
         }
@@ -75,13 +95,41 @@ namespace VINATECH.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.Update(article);
+                // Lấy bài viết hiện tại trong DB
+                var existingArticle = await _db.Articles.FindAsync(id);
+                if (existingArticle == null)
+                    return NotFound();
+
+                // Cập nhật các thông tin cơ bản
+                existingArticle.Title = article.Title;
+                existingArticle.Content = article.Content;
+                existingArticle.PublishDate = article.PublishDate;
+                existingArticle.CategoryId = article.CategoryId;
+
+                // Nếu có ảnh mới thì xử lý upload
+                if (article.ImageFile != null)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(article.ImageFile.FileName);
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(uploadPath, FileMode.Create))
+                    {
+                        await article.ImageFile.CopyToAsync(stream);
+                    }
+
+                    // Cập nhật đường dẫn ảnh mới
+                    existingArticle.ImagePath = "/images/" + fileName;
+                }
+
+                // Lưu thay đổi vào DB
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.Categories = _db.Categories.ToList();
             return View(article);
         }
+
 
         // Xóa
         public async Task<IActionResult> Delete(int? id)

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Bảng điều khiển - Quản trị hệ thống";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">📊 Bảng điều khiển (Dashboard)</h2>
+
+    <div class="row text-center">
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Bài viết</h5>
+                    <p class="display-6">@ViewBag.TotalArticles</p>
+                    <a asp-controller="Article" asp-action="Index" class="btn btn-outline-primary btn-sm">Quản lý bài viết</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h5 class="card-title text-success">Danh mục</h5>
+                    <p class="display-6">@ViewBag.TotalCategories</p>
+                    <a asp-controller="Category" asp-action="Index" class="btn btn-outline-success btn-sm">Quản lý danh mục</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-info">
+                <div class="card-body">
+                    <h5 class="card-title text-info">Hội viên</h5>
+                    <p class="display-6">@ViewBag.TotalMembers</p>
+                    <a asp-controller="Member" asp-action="Index" class="btn btn-outline-info btn-sm">Quản lý hội viên</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

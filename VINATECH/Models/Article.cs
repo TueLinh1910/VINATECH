@@ -22,6 +22,10 @@ namespace VINATECH.Models
 
         [Display(Name = "Ảnh minh họa")]
         public string? ImagePath { get; set; }
+        [NotMapped]
+        [Display(Name = "Chọn ảnh")]
+        public IFormFile? ImageFile { get; set; }
+
 
         // Liên kết đến danh mục
         [Display(Name = "Danh mục")]

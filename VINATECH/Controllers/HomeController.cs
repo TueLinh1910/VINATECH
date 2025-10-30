@@ -1,32 +1,34 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using VINATECH.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using VINATECH.Data;
 
 namespace VINATECH.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext db)
         {
-            _logger = logger;
+            _db = db;
         }
 
-        public IActionResult Index()
+        // Trang chủ hiển thị bài viết mới nhất
+        public IActionResult Index(int? categoryId)
         {
-            return View();
-        }
+            var articles = _db.Articles
+                .Include(a => a.Category)
+                .OrderByDescending(a => a.PublishDate)
+                .AsQueryable();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            // Nếu có chọn danh mục thì lọc
+            if (categoryId.HasValue)
+            {
+                articles = articles.Where(a => a.CategoryId == categoryId.Value);
+            }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.Categories = _db.Categories.ToList();
+            return View(articles.ToList());
         }
     }
 }
