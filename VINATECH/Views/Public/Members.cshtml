@@ -1,0 +1,27 @@
+﻿@model IEnumerable<VINATECH.Models.Member>
+@{
+    ViewData["Title"] = "Thành viên hiệp hội";
+}
+
+<h2 class="text-center mb-4">Danh sách thành viên hiệp hội</h2>
+
+<div class="row">
+    @foreach (var member in Model)
+    {
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm text-center">
+                <img src="@(!string.IsNullOrEmpty(member.AvatarPath) ? member.AvatarPath : "/images/default-avatar.jpg")"
+                     class="card-img-top mx-auto" style="height:200px; object-fit:cover;" alt="avatar" />
+                <div class="card-body">
+                    <h5 class="card-title">@member.FullName</h5>
+                    <p class="card-text">
+                        <strong>@member.Position</strong><br />
+                        @member.Organization
+                    </p>
+                    <p class="small text-muted">@member.Email</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

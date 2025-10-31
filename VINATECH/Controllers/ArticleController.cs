@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using VINATECH.Data;
 using VINATECH.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VINATECH.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ArticleController : Controller
     {
         private readonly ApplicationDbContext _db;

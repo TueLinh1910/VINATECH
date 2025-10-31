@@ -4,7 +4,7 @@ using VINATECH.Models;
 
 namespace VINATECH.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -16,4 +16,3 @@ namespace VINATECH.Data
         public DbSet<Article> Articles { get; set; }
     }
 }
-

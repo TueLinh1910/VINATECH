@@ -30,5 +30,12 @@ namespace VINATECH.Controllers
             ViewBag.Categories = _db.Categories.ToList();
             return View(articles.ToList());
         }
+
+        public IActionResult About()
+        {
+            ViewData["Title"] = "Giới thiệu VINATECH";
+            return View();
+        }
+
     }
 }

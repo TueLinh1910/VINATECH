@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VINATECH.Models
 {
@@ -18,8 +19,14 @@ namespace VINATECH.Models
         public string Organization { get; set; }
         public string Position { get; set; }
 
-        // trạng thái: 0 = chờ duyệt, 1 = active, 2 = khóa
         public int Status { get; set; } = 0;
+
+        // 🆕 đường dẫn lưu ảnh đại diện
+        public string? AvatarPath { get; set; }
+
+        // 🆕 chỉ dùng để upload, không lưu trong DB
+        [NotMapped]
+        public IFormFile? AvatarFile { get; set; }
     }
 }
 

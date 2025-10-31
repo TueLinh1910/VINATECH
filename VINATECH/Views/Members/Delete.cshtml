@@ -1,0 +1,26 @@
+﻿@model VINATECH.Models.Member
+@{
+    ViewData["Title"] = "Xóa thành viên";
+}
+
+<h2>Xóa thành viên</h2>
+<h5>Bạn có chắc muốn xóa thành viên này không?</h5>
+
+<div class="card p-3 mb-3">
+    <dl class="row">
+        <dt class="col-sm-3">Họ tên:</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Tổ chức:</dt>
+        <dd class="col-sm-9">@Model.Organization</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

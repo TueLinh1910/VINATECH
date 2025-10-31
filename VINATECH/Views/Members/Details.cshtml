@@ -1,0 +1,37 @@
+﻿@model VINATECH.Models.Member
+@{
+    ViewData["Title"] = "Chi tiết thành viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card p-3 mb-3">
+    <dl class="row">
+        <dt class="col-sm-3">Họ tên:</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+
+        <dt class="col-sm-3">Email:</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+
+        <dt class="col-sm-3">Số điện thoại:</dt>
+        <dd class="col-sm-9">@Model.Phone</dd>
+
+        <dt class="col-sm-3">Tổ chức:</dt>
+        <dd class="col-sm-9">@Model.Organization</dd>
+
+        <dt class="col-sm-3">Chức vụ:</dt>
+        <dd class="col-sm-9">@Model.Position</dd>
+
+        <dt class="col-sm-3">Trạng thái:</dt>
+        <dd class="col-sm-9">
+            @{
+                string status = Model.Status == 1 ? "Hoạt động" :
+                Model.Status == 2 ? "Khóa" : "Chờ duyệt";
+            }
+            <span>@status</span>
+        </dd>
+    </dl>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Sửa</a>
+<a asp-action="Index" class="btn btn-secondary">Trở về</a>
