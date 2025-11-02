@@ -11,12 +11,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ⚙️ Đăng ký Identity với ApplicationUser
-builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-.AddRoles<IdentityRole>() // thêm quản lý vai trò
-.AddEntityFrameworkStores<ApplicationDbContext>();
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromSeconds(30); // Phiên hết hạn sau 30 phút
+    options.SlidingExpiration = true; // Tự động gia hạn nếu người dùng còn hoạt động
+    options.LoginPath = "/Account/Login"; // Trang login
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Trang không có quyền
+});
 
 builder.Services.AddControllersWithViews();
 
@@ -75,6 +83,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
+// app.MapRazorPages();
 
 app.Run();
