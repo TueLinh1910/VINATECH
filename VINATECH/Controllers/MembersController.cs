@@ -163,6 +163,39 @@ namespace VINATECH.Controllers
         {
             return _context.Members.Any(e => e.Id == id);
         }
+
+        // --- DUYỆT THÀNH VIÊN ---
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Approve(int id)
+        {
+            var member = await _context.Members.FindAsync(id);
+            if (member == null) return NotFound();
+
+            member.Status = 1; // ✅ 1 = Đã duyệt
+            _context.Update(member);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Đã duyệt hội viên: {member.FullName}";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // --- HỦY DUYỆT (TỪ CHỐI) ---
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var member = await _context.Members.FindAsync(id);
+            if (member == null) return NotFound();
+
+            member.Status = -1; // ❌ -1 = Bị từ chối
+            _context.Update(member);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"Đã từ chối hội viên: {member.FullName}";
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
 

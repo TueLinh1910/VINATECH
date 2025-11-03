@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace VINATECH.Models
 {
@@ -27,6 +29,14 @@ namespace VINATECH.Models
         // 🆕 chỉ dùng để upload, không lưu trong DB
         [NotMapped]
         public IFormFile? AvatarFile { get; set; }
+
+        // ⚙️ Liên kết với bảng AspNetUsers (Identity)
+        [Required]
+        public string UserId { get; set; } = string.Empty;
+
+        [ForeignKey("UserId")]
+        public ApplicationUser? User { get; set; }  // ✅ Dùng ApplicationUser thay vì IdentityUser
+
     }
 }
 
